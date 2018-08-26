@@ -187,7 +187,7 @@ struct
         ; wrap }
 
     let wrap k ({ state; cnum; _ } as t) =
-      if cnum + 4 > 76
+      if cnum + 4 > 60
       then string "\r\n" (fun state -> k { t with state = state; cnum = 4; }) state
       else k { t with cnum = cnum + 4 }
 
