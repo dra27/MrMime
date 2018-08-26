@@ -89,7 +89,7 @@ struct
       $ string ">"
       $ w_crlf
     | `ReturnPath None ->
-      string "Return-Path: < >" $ w_crlf
+      string "Return-Path: <>" $ w_crlf
 
   let w_field = function
     | `Trace (Some trace, received) ->
