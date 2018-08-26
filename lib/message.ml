@@ -233,18 +233,22 @@ struct
         Content.Encoder.w_part content
         $ w_crlf
         $ w_body content body
+        $ string (Rfc2046.make_close_delimiter boundary)
       | [ (content, _fields, Some (Top.PMultipart lst)) ] ->
         Content.Encoder.w_part content
         $ w_crlf
         $ w_multipart content lst
+        $ string (Rfc2046.make_close_delimiter boundary)
       | [ (content, _fields, None) ] ->
         Content.Encoder.w_part content
         $ w_crlf
+        $ string (Rfc2046.make_close_delimiter boundary)
       | (content, _fields, Some (Top.PDiscrete body)) :: r ->
         Content.Encoder.w_part content
         $ w_crlf
         $ w_body content body
         $ string (Rfc2046.make_delimiter boundary)
+        $ w_crlf
         $ aux r
       | (content, _fields, Some (Top.PMultipart lst)) :: r ->
         Content.Encoder.w_part content
