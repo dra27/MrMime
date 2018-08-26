@@ -32,6 +32,36 @@ sig
   val p_end_of_part      : Content.t -> [ `End | `Next ] Parser.t
 end
 
+module Encoder :
+sig
+  val w_encode :
+    string ->
+    (Encoder.t ->
+     ([> `Partial of bytes * int * int * (int -> 'a) ] as 'a)) ->
+    Encoder.t -> 'a
+  val w_body :
+    Content.t ->
+    encoding ->
+    ([> `Partial of bytes * int * int * (int -> 'a) ] as 'a)
+    Encoder.k0
+  val w_crlf :
+    (Encoder.t ->
+     ([> `Partial of bytes * int * int * (int -> 'a) ] as 'a)) ->
+    Encoder.t -> 'a
+  exception Expected_boundary
+  val w_multipart :
+    Content.t ->
+    (Content.t * field_part list * (encoding, 'a) part option) list ->
+    (Encoder.t ->
+     ([> `Partial of bytes * int * int * (int -> 'b) ] as 'b)) ->
+    Encoder.t -> 'b
+  val _w_message :
+    'a * (encoding, 'b) message ->
+    (Encoder.t ->
+     ([> `Partial of bytes * int * int * (int -> 'c) ] as 'c)) ->
+    Encoder.t -> 'c
+end
+
 module Extension :
 sig
   val add_encoding : string -> (unit Parser.t -> unit Parser.t -> encoding Parser.t) -> unit
