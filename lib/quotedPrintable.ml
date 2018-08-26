@@ -180,6 +180,7 @@ struct
       then string "=\r\n" (fun state -> k { t with position = 0; state = state }) state
       else k t
 
+    (* TODO It would be nice to have the traditional "rectangular version" of quoted printable as well *)
     let commit_word k ({ position; word; _ } as t) =
       (if position + Buffer.length word >= 76
        then add_break
