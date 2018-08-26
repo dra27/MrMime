@@ -66,7 +66,7 @@ struct
     | `Received (l, Some date) ->
       let w_data = function
         | `Word word -> Address.Encoder.w_word word
-        | `Domain domain -> Address.Encoder.w_domain domain
+        | `Domain domain -> (if domain = `Domain ["by"] || domain = `Domain ["for"] then Wrap.force_newline $ Wrap.char '\t' else noop) $ Address.Encoder.w_domain domain
         | `Addr addr -> Address.Encoder.w_mailbox' addr
       in
       string "Received: "
