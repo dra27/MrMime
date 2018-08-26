@@ -285,21 +285,21 @@ struct
   let w_header { date; from; sender; reply_to; to'; cc; bcc; subject;
                  msg_id; in_reply_to; references; comments; keywords;
                  resents; traces; fields; unsafe; _ } =
-    (match date        with Some v -> w_field (`Date v) | None -> noop)
+      List.fold_right Trace.Encoder.w_trace traces
+    $ (match date        with Some v -> w_field (`Date v) | None -> noop)
     $ (match from        with [] -> noop | v -> w_field (`From v))
     $ (match sender      with Some v -> w_field (`Sender v) | None -> noop)
     $ (match reply_to    with [] -> noop | v -> w_field (`ReplyTo v))
     $ (match to'         with [] -> noop | v -> w_field (`To v))
     $ (match cc          with [] -> noop | v -> w_field (`Cc v))
     $ (match bcc         with [] -> noop | v -> w_field (`Bcc v))
-    $ (match subject     with Some v -> w_field (`Subject v) | None -> noop)
     $ (match msg_id      with Some v -> w_field (`MessageID v) | None -> noop)
+    $ (match subject     with Some v -> w_field (`Subject v) | None -> noop)
     $ (match in_reply_to with [] -> noop | v -> w_field (`InReplyTo v))
     $ (match references  with [] -> noop | v -> w_field (`References v))
     $ List.fold_right (fun v -> w_field (`Comments v)) comments
     $ List.fold_right (fun v -> w_field (`Keywords v)) keywords
     $ List.fold_right Resent.Encoder.w_resent resents
-    $ List.fold_right Trace.Encoder.w_trace traces
     $ (Map.fold (fun field values acc -> List.fold_right (fun value -> w_field (`Field (field, value))) values $ acc) fields noop)
     $ (Map.fold (fun field values acc -> List.fold_right (fun value -> w_field (`Unsafe (field, value))) values $ acc) unsafe noop)
 end
