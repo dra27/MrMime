@@ -243,6 +243,19 @@ struct
         Content.Encoder.w_part content
         $ w_crlf
         $ string (Rfc2046.make_close_delimiter boundary)
+      | [content, _fields, Some (Top.PMessage (headers, message))] ->
+        Content.Encoder.w_part content
+        $ w_crlf
+        $ _w_message (headers, message)
+        $ string (Rfc2046.make_close_delimiter boundary)
+      | (content, _fields, Some (Top.PMessage (headers, message))) :: r ->
+        Content.Encoder.w_part content
+        $ w_crlf
+        $ _w_message (headers, message)
+        $ w_crlf
+        $ string (Rfc2046.make_delimiter boundary)
+        $ w_crlf
+        $ aux r
       | (content, _fields, Some (Top.PDiscrete body)) :: r ->
         Content.Encoder.w_part content
         $ w_crlf
