@@ -268,27 +268,31 @@ struct
         $ w_crlf
         $ w_multipart content lst
         $ string (Rfc2046.make_delimiter boundary)
+        $ w_crlf
         $ aux r
       | (content, _fields, None) :: r ->
         Content.Encoder.w_part content
         $ w_crlf
         $ string (Rfc2046.make_delimiter boundary)
+        $ w_crlf
         $ aux r
-      | _ -> assert false (* impossible to have an empty list *)
-                          (* other case, TODO! *)
+      | _::_ -> assert false (* other case, TODO! *)
+      | [] -> assert false (* impossible to have an empty list *)
     in
     string (Rfc2046.make_delimiter boundary)
     $ w_crlf
     $ aux lst
 
-  let _w_message (_header, body) =
+  and _w_message (header, body) =
     match body with
     | Top.Multipart (content, _fields, lst) ->
-      Content.Encoder.w_message content
+        Header.Encoder.w_header header
+      $ Content.Encoder.w_message content
       $ w_crlf
       $ w_multipart content lst
     | Top.Discrete (content, _fields, body) ->
-      Content.Encoder.w_message content
+        Header.Encoder.w_header header
+      $ Content.Encoder.w_message content
       $ w_crlf
       $ w_body content body
     | _ -> assert false (* TODO: not implemented yet *)

@@ -56,7 +56,7 @@ sig
      ([> `Partial of bytes * int * int * (int -> 'b) ] as 'b)) ->
     Encoder.t -> 'b
   val _w_message :
-    'a * (encoding, 'b) message ->
+    Header.header * (encoding, 'b) message ->
     (Encoder.t ->
      ([> `Partial of bytes * int * int * (int -> 'c) ] as 'c)) ->
     Encoder.t -> 'c
