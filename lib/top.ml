@@ -8,7 +8,7 @@ let locate buff off len f =
 type field_message =
   [ Rfc5322.field | Rfc2045.field | Rfc2045.field_version | Rfc5322.skip ]
 type field_part =
-  [ Rfc5322.field | Rfc2045.field | Rfc5322.skip ]
+  [ Rfc5322.field | Rfc2045.field | Rfc2045.field_version | Rfc5322.skip ]
 
 type ('a, 'b) message =
   | Discrete  of Content.t * field_message list * 'a

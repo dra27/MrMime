@@ -8,7 +8,7 @@ let locate buff off len f =
 open Parser
 open Parser.Convenience
 
-type ('field, 'a) octet = (Content.t -> ([ Rfc5322.field | Rfc2045.field | Rfc5322.skip ] as 'field) list -> 'a t)
+type ('field, 'a) octet = (Content.t -> ([ Rfc5322.field | Rfc2045.field | Rfc2045.field_version | Rfc5322.skip ] as 'field) list -> 'a t)
 
 let is_bcharsnospace = function
   | '\'' | '(' | ')' | '+' | '_' | ','

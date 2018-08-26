@@ -264,5 +264,5 @@ sig
                           ; definition should be ignored.
      ]}
   *)
-  val part            : ([> Rfc2045.field | Rfc2045.unsafe | Rfc2045.skip ] as 'a) list -> (t * 'a list) Parser.t
+  val part            : ([> Rfc2045.field | Rfc2045.unsafe | Rfc2045.field_version | Rfc2045.skip ] as 'a) list -> (t * 'a list) Parser.t
 end

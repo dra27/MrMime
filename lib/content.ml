@@ -184,7 +184,7 @@ struct
 
       succ i s (catch [] default fields) }
 
-  let part (fields : [> Rfc2045.field | Rfc2045.unsafe | Rfc2045.skip ] list) =
+  let part (fields : [> Rfc2045.field | Rfc2045.unsafe | Rfc2045.field_version | Rfc2045.skip ] list) =
     { f = fun i s _fail succ ->
       let rec catch garbage acc = function
         | `ContentType content :: r ->
@@ -195,6 +195,8 @@ struct
           catch garbage { acc with id = Some id } r
         | `ContentDescription desc :: r ->
           catch garbage { acc with description = Some desc } r
+        | `MimeVersion version :: r ->
+          catch garbage { acc with version = version } r
         | `Content (field_name, value) :: r ->
           let content =
             try let old = Map.find field_name acc.content in

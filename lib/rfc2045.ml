@@ -215,7 +215,10 @@ let field extend_mime extend field_name =
 let sp = Format.sprintf
 
 let part_field extend_mime extend field_name =
-  (field extend_mime extend field_name)
+  (field extend_mime (fun field_name -> match String.lowercase_ascii field_name with
+     | "mime-version" -> version <* Rfc822.crlf >>| fun v -> `MimeVersion v
+     | _ -> extend field_name)
+     field_name)
   <|> ((Rfc5322.unstructured <* Rfc822.crlf
         >>| fun v -> `Unsafe (field_name, v)) <?> (sp "Unsafe %s" field_name))
 
@@ -249,4 +252,6 @@ let mime_message_headers extend_mime extend =
 let mime_part_headers extend =
   entity_part_headers
     (fun _ -> fail Rfc5322.Nothing_to_do)
-    extend
+    (fun field_name -> match String.lowercase_ascii field_name with
+     | "mime-version" -> version <* Rfc822.crlf >>| fun v -> `MimeVersion v
+     | _ -> extend field_name)

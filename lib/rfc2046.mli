@@ -7,7 +7,7 @@ val make_dash_boundary       : string -> string
 val make_delimiter           : string -> string
 val make_close_delimiter     : string -> string
 
-type ('field, 'a) octet = (Content.t -> ([ Rfc5322.field | Rfc2045.field | Rfc5322.skip ] as 'field) list -> 'a t)
+type ('field, 'a) octet = (Content.t -> ([ Rfc5322.field | Rfc2045.field | Rfc2045.field_version | Rfc5322.skip ] as 'field) list -> 'a t)
 
 val dash_boundary            : string -> unit t
 val discard_to_dash_boundary : string -> unit t
