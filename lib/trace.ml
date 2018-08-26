@@ -83,8 +83,10 @@ struct
       $ (fun k -> Wrap.(lift ((hovbox 0 $ w_lst space w_data l $ close_box) (unlift k))))
       $ w_crlf
     | `ReturnPath (Some m) ->
-      string  "Return-Path: "
+      (* XXX Should probably be a version in Address.Encoder which writes <mailbox> *)
+      string  "Return-Path: <"
       $ (fun k -> Wrap.(lift ((hovbox 0 $ Address.Encoder.w_mailbox' m $ close_box) (unlift k))))
+      $ string ">"
       $ w_crlf
     | `ReturnPath None ->
       string "Return-Path: < >" $ w_crlf
