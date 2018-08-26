@@ -137,9 +137,9 @@ struct
     | `Skip line -> string line $ w_crlf
 
   let w_message { ty; encoding; version; id; description; content; _ } =
-    w_field (`ContentType ty)
+      w_field_version (`MimeVersion version)
+    $ w_field (`ContentType ty)
     $ w_field (`ContentEncoding encoding)
-    $ w_field_version (`MimeVersion version)
     $ (match id          with Some v -> w_field (`ContentID v) | None -> noop)
     $ (match description with Some v -> w_field (`ContentDescription v) | None -> noop)
     $ (Map.fold (fun field values acc -> List.fold_right (fun value -> w_field (`Content (field, value))) values $ acc) content noop)
